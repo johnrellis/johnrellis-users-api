@@ -1,0 +1,15 @@
+sudo: required
+
+services:
+  - docker
+
+
+install: docker build -t johnrellis/johnrellis-users-api:$TRAVIS_BUILD_NUMBER .
+
+before_script: docker run johnrellis/johnrellis-users-api:$TRAVIS_BUILD_NUMBER npm run lint
+
+script: docker run johnrellis/johnrellis-users-api:$TRAVIS_BUILD_NUMBER npm test
+
+deploy:
+  provider: script
+  script: bash docker_push.bash
