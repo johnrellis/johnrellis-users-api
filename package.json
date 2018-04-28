@@ -5,7 +5,8 @@
   "main": "app.js",
   "homepage": "https://github.com/johnrellis/johnrellis-users-api#readme",
   "scripts": {
-    "test": "mocha",
+    "test" : "mocha test/unit",
+    "integration": "mocha test/integration",
     "lint": "node_modules/.bin/eslint ."
   },
   "repository": {
@@ -22,6 +23,7 @@
     "url": "https://github.com/johnrellis/johnrellis-users-api/issues"
   },
   "dependencies": {
+    "body-parser": "^1.18.2",
     "eslint": "^4.19.1",
     "express": "^4.16.3",
     "mongoose": "^5.0.16",

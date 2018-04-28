@@ -2,11 +2,13 @@
 
 const log = require('winston');
 
-module.exports = (user) => {
-    let User = require('../../schemas/user.js');
-    let newUser = new User(user);
-    newUser.save(function (err, newBorn) {
-        if (err) return log.error(err);
-        log.info('newUser saved',newBorn);
-    }); 
+module.exports = async (req, res) => {
+    let userModel = require('../../models/user.js');
+    try {
+        let user = await userModel.save(req.body);
+        res.status(201).json(user);
+    }catch(error){
+        log.error(error);
+        res.sendStatus(400);
+    }
 };
