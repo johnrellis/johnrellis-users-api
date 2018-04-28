@@ -23,14 +23,14 @@ describe('user.create', function() {
     let defaultUser = {
         email: 'john@home.com'
     };
-    let userModel = require(`${process.cwd()}/routes/${version}/models/user`);
+    let userModel = require(`${process.cwd()}/routes/${version}/models/user.model`);
 
     it('should be able to save', function(done) {
         let mockModel = function() {};
         mockModel.prototype.save = function() {
             return 'saved';
         };
-        mockery.registerMock('../schemas/user.js', mockModel);
+        mockery.registerMock('../schemas/user.schema.js', mockModel);
         expect(userModel.save(defaultUser)).to.equal('saved');
         done();
     });

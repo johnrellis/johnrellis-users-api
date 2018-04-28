@@ -4,7 +4,7 @@ const chai = require('chai');
 const expect = chai.expect;
 const chaiHttp = require('chai-http');
 const mongoose = require('mongoose');
-const User = require('../../routes/v1/schemas/user');
+const User = require(`${process.cwd()}/routes/v1/schemas/user.schema`);
 const log = require('winston');
 
 chai.use(chaiHttp);

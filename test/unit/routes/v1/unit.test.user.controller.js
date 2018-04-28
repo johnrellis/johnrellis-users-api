@@ -13,7 +13,7 @@ const version = require('./version');
 chai.use(sinonChai);
 
 
-describe('user.create', function() {
+describe('user controller', function() {
     let sandbox = null;
 
     beforeEach(function() {
@@ -27,7 +27,7 @@ describe('user.create', function() {
         mockery.disable();
     });
 
-    let userCreateController = require(`${process.cwd()}/routes/${version}/controllers/user/user.create`);
+    let userCreateController = require(`${process.cwd()}/routes/${version}/controllers/user.controller`);
 
     let defaultUser = {
         email: 'john@home.com'
@@ -36,13 +36,13 @@ describe('user.create', function() {
     it('should be able to create a user', function() {
         let saveUserStub = sinon.sandbox.stub().resolves({hello:'there'});
 
-        mockery.registerMock('../../models/user.js', {save: saveUserStub});
+        mockery.registerMock('../models/user.model.js', {save: saveUserStub});
         const request = {
             body : defaultUser
         };
         const req = mockReq(request);
         const res = mockRes();
-        return userCreateController(req,res).then(function() {
+        return userCreateController.save(req,res).then(function() {
             expect(res.status).to.be.calledWith(201);
         });
     });
@@ -50,13 +50,13 @@ describe('user.create', function() {
     it('should not be able to create a user', function() {
         let saveUserStub = sinon.sandbox.stub().rejects('Failed to save');
 
-        mockery.registerMock('../../models/user.js', {save: saveUserStub});
+        mockery.registerMock('../models/user.model.js', {save: saveUserStub});
         const request = {
             body : defaultUser
         };
         const req = mockReq(request);
         const res = mockRes();
-        return userCreateController(req,res).then(function() {
+        return userCreateController.save(req,res).then(function() {
             expect(res.sendStatus).to.be.calledWith(400);
         });
     });
