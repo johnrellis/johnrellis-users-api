@@ -23,6 +23,7 @@ describe('user.create', function() {
 
     afterEach(function() {
         sandbox.restore();
+        mockery.deregisterAll();
         mockery.disable();
     });
 
@@ -43,6 +44,20 @@ describe('user.create', function() {
         const res = mockRes();
         return userCreateController(req,res).then(function() {
             expect(res.status).to.be.calledWith(201);
+        });
+    });
+
+    it('should not be able to create a user', function() {
+        let saveUserStub = sinon.sandbox.stub().rejects('Failed to save');
+
+        mockery.registerMock('../../models/user.js', {save: saveUserStub});
+        const request = {
+            body : defaultUser
+        };
+        const req = mockReq(request);
+        const res = mockRes();
+        return userCreateController(req,res).then(function() {
+            expect(res.sendStatus).to.be.calledWith(400);
         });
     });
 
