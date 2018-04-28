@@ -8,7 +8,7 @@ const expect = chai.expect;
 const mockReq = require('sinon-express-mock').mockReq;
 const mockRes = require('sinon-express-mock').mockRes;
 const mockery = require('mockery');
-
+const version = require('./version');
 
 chai.use(sinonChai);
 
@@ -27,7 +27,7 @@ describe('user.create', function() {
         mockery.disable();
     });
 
-    let userCreateController = require(`${process.cwd()}/routes/v1/controllers/user/user.create`);
+    let userCreateController = require(`${process.cwd()}/routes/${version}/controllers/user/user.create`);
 
     let defaultUser = {
         email: 'john@home.com'

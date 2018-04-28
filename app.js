@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 'use strict';
 
 global.__basedir = __dirname;
