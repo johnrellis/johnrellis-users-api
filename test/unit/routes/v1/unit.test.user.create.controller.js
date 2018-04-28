@@ -43,7 +43,7 @@ describe('user.create', function() {
         const req = mockReq(request);
         const res = mockRes();
         return userCreateController(req,res).then(function() {
-            expect(res.status).to.be.calledWith(202);
+            expect(res.status).to.be.calledWith(201);
         });
     });
 
