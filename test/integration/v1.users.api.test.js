@@ -50,6 +50,7 @@ describe('users api', function() {
             .end((err, res) => {
                 expect(res.status).to.equal(201);
                 expect(res.body.email).to.equal(defaultUser.email);
+                //todo : change to expect id
                 expect(res.body._id).to.exist;
                 done();
             });
