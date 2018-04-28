@@ -22,6 +22,9 @@ module.exports = {
       "error",
       "always"
     ],
+    "no-var": [
+      "error"
+    ],
     "strict": [
       "error",
       "global"
