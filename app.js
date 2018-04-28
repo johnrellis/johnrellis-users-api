@@ -11,7 +11,7 @@ const bodyParser = require('body-parser');
 app.use(bodyParser.json()); // for parsing application/json
 
 const mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/userservice');
+mongoose.connect(`mongodb://${process.env.MONGODB_HOST}/userservice`);
 
 let db = mongoose.connection;
 db.on('error', function(error) {

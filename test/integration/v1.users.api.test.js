@@ -12,7 +12,7 @@ chai.use(chaiHttp);
 describe('users api', function() {
 
     before(function(done) {
-        mongoose.connect('mongodb://localhost/userservice');
+        mongoose.connect(`mongodb://${process.env.MONGODB_HOST}/userservice`);
         let db = mongoose.connection;
 
         db.on('error', function(error) {
