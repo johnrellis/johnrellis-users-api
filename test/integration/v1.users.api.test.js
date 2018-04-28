@@ -66,7 +66,7 @@ describe('users api', function() {
                     email: 'john@home.com'
                 })
                 .end((err, res) => {
-                    expect(res.status).to.equal(400);
+                    expect(res.status).to.equal(898);
                     done();
                 });
         });
