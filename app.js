@@ -13,6 +13,9 @@ db.on('error', function(error) {
 });
 db.once('open', function() {
     log.info('connected to mongo');
+
+    let createUser = require('./routes/v1/controllers/user/user.create.js');
+    createUser({email:'john.who@where.com'});
 });
 
 app.get('/', (req, res) => res.send('I am alive'));
