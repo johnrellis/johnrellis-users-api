@@ -205,4 +205,30 @@ describe('user controller', function() {
         });
     });
 
+
+    it('should be able list user by query', function() {
+        let listUserStub = sinon.sandbox.stub().resolves([mockUser]);
+
+        mockery.registerMock('../models/user.model.js', {where: listUserStub});
+        const request = {};
+        const req = mockReq(request);
+        const res = mockRes();
+        return userCreateController.list(req,res).then(function() {
+            expect(res.status).to.be.calledWith(200);
+            expect(res.json).to.be.calledWith([mockUser]);
+        });
+    });
+
+    it('should get a 400 if error occurs while querying users', function() {
+        let listUserStub = sinon.sandbox.stub().rejects(new Error('Error occurred'));
+        mockery.registerMock('../models/user.model.js', {where: listUserStub});
+        const request = {};
+        const req = mockReq(request);
+        const res = mockRes();
+        return userCreateController.list(req,res).then(function() {
+            expect(res.status).to.be.calledWith(400);
+            expect(res.json).to.be.calledWith({error:'Error occurred'});
+
+        });
+    });
 });
