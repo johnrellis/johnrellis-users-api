@@ -61,4 +61,19 @@ describe('user controller', function() {
         });
     });
 
+    it('should not be able find user by id', function() {
+        let saveUserStub = sinon.sandbox.stub().resolves({id:'12345f', email:'john@home.com'});
+
+        mockery.registerMock('../models/user.model.js', {findByID: saveUserStub});
+        const request = {
+            body : defaultUser
+        };
+        const req = mockReq(request);
+        const res = mockRes();
+        return userCreateController.get(req,res).then(function() {
+            expect(res.status).to.be.calledWith(200);
+            expect(res.json).to.be.calledWith({id:'12345f', email:'john@home.com'});
+        });
+    });
+
 });
