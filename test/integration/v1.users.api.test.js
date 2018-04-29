@@ -168,4 +168,18 @@ describe('users api', function() {
                     });
             });
     });
+
+
+    it('should be able to query for a user by email address', function(done) {
+        chai.request('http://localhost:3000')
+            .get('/api/v1/users')
+            .query({email:defaultUser.email})
+            .send(defaultUser)
+            .end((err, res) => {
+                expect(res.status).to.equal(204);
+                expect(res.body).to.be.a('array');
+                done();
+            });
+    });
+
 });
