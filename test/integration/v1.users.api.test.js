@@ -72,4 +72,18 @@ describe('users api', function() {
         });
     });
 
+    it('should be able to retrieve a user by id', function(done) {
+        let user = new User(defaultUser);
+        user.save(function() {
+            chai.request('http://localhost:3000')
+                .get(`/api/v1/users/${user._id}`)
+                .end((err, res) => {
+                    expect(res.status).to.equal(200);
+                    expect(res.body.id).to.equal(user._id);
+                    expect(res.body.email).to.equal(user.email);
+                    done();
+                });
+        });
+    });
+
 });
