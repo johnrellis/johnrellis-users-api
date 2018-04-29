@@ -52,6 +52,7 @@ module.exports.update = (id, user) => {
  */
 module.exports.where = (query, limit = 10, offset = 0 ,sort = '') => {
     const User = require('../schemas/user.schema.js');
+    /* istanbul ignore next */
     return User.find(query).skip(offset).limit(limit).sort(sort);
 };
 
