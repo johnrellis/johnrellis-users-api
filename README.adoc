@@ -1,4 +1,5 @@
 # johnrellis-users-api
+:toc:
 
 image:https://travis-ci.org/johnrellis/johnrellis-users-api.svg?branch=master["Build Status", link="https://travis-ci.org/johnrellis/johnrellis-users-api"]
 
