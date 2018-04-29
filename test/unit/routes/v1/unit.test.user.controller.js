@@ -63,7 +63,7 @@ describe('user controller', function() {
         });
     });
 
-    it('should not be able find user by id', function() {
+    it('should be able find user by id', function() {
         let saveUserStub = sinon.sandbox.stub().resolves(mockUser);
 
         mockery.registerMock('../models/user.model.js', {findByID: saveUserStub});
