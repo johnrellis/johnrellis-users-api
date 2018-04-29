@@ -46,7 +46,7 @@ describe('user model', function() {
         done();
     });
 
-    it('should returnn null with invalid object id when findByID', function(done) {
+    it('should return null with invalid object id when findByID', function(done) {
         let mockModel = {
             findById () {
                 return 'findById';
