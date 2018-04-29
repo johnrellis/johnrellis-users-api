@@ -6,7 +6,7 @@ const expect = chai.expect;
 const mockery = require('mockery');
 const version = require('./version');
 
-describe('user.create', function() {
+describe('user model', function() {
     let sandbox = null;
 
     beforeEach(function() {
@@ -42,7 +42,18 @@ describe('user.create', function() {
             }
         };
         mockery.registerMock('../schemas/user.schema.js', mockModel);
-        expect(userModel.findByID(defaultUser)).to.equal('findById');
+        expect(userModel.findByID('5ae5dca079e219ddc56884ed')).to.equal('findById');
+        done();
+    });
+
+    it('should returnn null with invalid object id when findByID', function(done) {
+        let mockModel = {
+            findById () {
+                return 'findById';
+            }
+        };
+        mockery.registerMock('../schemas/user.schema.js', mockModel);
+        expect(userModel.findByID('123456')).to.equal(null);
         done();
     });
 

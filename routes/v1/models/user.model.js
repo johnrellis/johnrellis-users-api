@@ -1,5 +1,6 @@
 'use strict';
 
+const mongoose = require('mongoose');
 
 /**
  * Calls mongoose and mongodb to save a user.  
@@ -20,5 +21,5 @@ module.exports.save = (user) => {
  */
 module.exports.findByID = (id) => {
     let User = require('../schemas/user.schema.js');
-    return User.findById(id);
+    return mongoose.Types.ObjectId.isValid(id) ? User.findById(id) : null;
 };

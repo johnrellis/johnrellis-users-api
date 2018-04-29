@@ -87,4 +87,23 @@ describe('users api', function() {
         });
     });
 
+    it('should get a 404 when user does not exist', function(done) {
+        chai.request('http://localhost:3000')
+            .get('/api/v1/users/5ae5a35ddb5a18d9d04d0b4d')
+            .end((err, res) => {
+                expect(res.status).to.equal(404);
+                done();
+            });
+    });
+
+    it('should get a 404 when user does not exist with invalid mongo object id', function(done) {
+        chai.request('http://localhost:3000')
+            .get('/api/v1/users/123456')
+            .end((err, res) => {
+                expect(res.status).to.equal(404);
+                done();
+            });
+    });
+
+
 });
