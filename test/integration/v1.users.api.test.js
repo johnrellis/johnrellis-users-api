@@ -106,4 +106,27 @@ describe('users api', function() {
     });
 
 
+    it('should be able to delete a user', function(done) {
+        let user = new User(defaultUser);
+        user.save(function() {
+            chai.request('http://localhost:3000')
+                .delete(`/api/v1/users/${user._id}`)
+                .end((err, res) => {
+                    expect(res.status).to.equal(204);
+                    expect(res.body.id).to.equal(user._id.toString());
+                    expect(res.body.email).to.equal(user.email);
+                    done();
+                });
+        });
+    });
+
+
+    it('should get a 404 when user does not exist when deleting', function(done) {
+        chai.request('http://localhost:3000')
+            .delete('/api/v1/users/5ae5a35ddb5a18d9d04d0b4d')
+            .end((err, res) => {
+                expect(res.status).to.equal(404);
+                done();
+            });
+    });
 });
