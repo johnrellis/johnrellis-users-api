@@ -1,6 +1,8 @@
 'use strict';
 
 const mongoose = require('mongoose');
+const User = require('../schemas/user.schema.js');
+
 
 /**
  * Calls mongoose and mongodb to save a user.  
@@ -8,7 +10,6 @@ const mongoose = require('mongoose');
  * @return {Object}      the saved mongoose User model
  */
 module.exports.save = (user) => {
-    let User = require('../schemas/user.schema.js');
     let newUser = new User(user);
     return newUser.save();
 };
@@ -20,6 +21,15 @@ module.exports.save = (user) => {
  * @return {Object}      the found object
  */
 module.exports.findByID = (id) => {
-    let User = require('../schemas/user.schema.js');
     return mongoose.Types.ObjectId.isValid(id) ? User.findById(id) : null;
 };
+
+/**
+ * Calls mongoose and mongodb to findByIdAndRemove a user 
+ * @param  {String} user the _id of a mongoose object
+ * @return {Object}      the found object
+ */
+module.exports.delete = (id) => {
+    return mongoose.Types.ObjectId.isValid(id) ? User.findByIdAndRemove(id) : null;
+};
+

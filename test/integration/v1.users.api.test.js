@@ -113,8 +113,6 @@ describe('users api', function() {
                 .delete(`/api/v1/users/${user._id}`)
                 .end((err, res) => {
                     expect(res.status).to.equal(204);
-                    expect(res.body.id).to.equal(user._id.toString());
-                    expect(res.body.email).to.equal(user.email);
                     done();
                 });
         });

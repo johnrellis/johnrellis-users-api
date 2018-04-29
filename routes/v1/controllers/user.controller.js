@@ -54,3 +54,26 @@ module.exports.get = async (req, res) => {
         res.status(400).json({error:error.message});
     }
 };
+
+/**
+ * async function to delete a user by id that is expected in req.params, 204 if successful
+ * 
+ * @param  {Object} req the request object, should contain params.id typically an express Request
+ * @param  {Object} res the response object, typically an express Response
+ */
+module.exports.delete = async (req, res) => {
+    //todo : should validate that id actually exists
+    log.info(`Attempting to delete user for ${req.params.id}`);
+    let userModel = require('../models/user.model.js');
+    try {
+        let deleted = await userModel.delete(req.params.id);
+        if(deleted){
+            res.sendStatus(204);
+        } else {
+            res.sendStatus(404);
+        }
+    }catch(error){
+        log.error(error);
+        res.status(400).json({error:error.message});
+    }
+};
