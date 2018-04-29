@@ -44,3 +44,13 @@ module.exports.update = (id, user) => {
     return mongoose.Types.ObjectId.isValid(id) ? User.findByIdAndUpdate(id, user, {new:true}) : null;
 };
 
+/**
+ * Calls mongoose and mongodb to findById a user 
+ * @param  {String} user the _id of a mongoose object
+ * @return {Object}      the found object
+ */
+module.exports.where = (query) => {
+    const User = require('../schemas/user.schema.js');
+    return User.find(query).limit(100);
+};
+

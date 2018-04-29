@@ -109,3 +109,26 @@ module.exports.put = async (req, res) => {
         res.status(400).json({error:error.message});
     }
 };
+
+
+/**
+ * async function that retrives a user user for an id that is expected in req.params calls the result on the res object
+ *
+ * Will return 404 if user cannot be found
+ * 
+ * @param  {Object} req the request object, should contain params.id typically an express Request
+ * @param  {Object} res the response object, typically an express Response
+ */
+module.exports.list = async (req, res) => {
+    //todo : should validate that id actually exists
+    log.info('Attempting to query users for ', req.query);
+    let userModel = require('../models/user.model.js');
+    try {
+        let users = await userModel.where(req.query);
+        let transformedUsers = users.map(user => transformIdOutgoing(user));
+        res.status(200).json(transformedUsers);
+    }catch(error){
+        log.error(error);
+        res.status(400).json({error:error.message});
+    }
+};

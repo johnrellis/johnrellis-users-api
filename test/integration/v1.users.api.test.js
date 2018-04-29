@@ -170,16 +170,63 @@ describe('users api', function() {
     });
 
 
-    it('should be able to query for a user by email address', function(done) {
-        chai.request('http://localhost:3000')
-            .get('/api/v1/users')
-            .query({email:defaultUser.email})
-            .send(defaultUser)
-            .end((err, res) => {
-                expect(res.status).to.equal(204);
-                expect(res.body).to.be.a('array');
+    describe('user querying', function() {
+        let users = [];
+
+        beforeEach(function(done) {
+            this.timeout(5000);
+            users = [];
+            for(let i=0;i<200;i++){
+                let user ={
+                    email:`john${i}@email.com`
+                };
+                users.push(user);
+            }
+            User.create(users, function(err) {
+                if(err){
+                    log.error(err); 
+                } else {
+                    done();
+                }              
+            });
+        });
+
+        afterEach(function(done) {
+            this.timeout(5000);
+            User.find({$or: users}).remove(function() {
                 done();
             });
+        });
+
+
+        it('should be able to query for a list of users', function(done) {
+            chai.request('http://localhost:3000')
+                .get('/api/v1/users')
+                .send(defaultUser)
+                .end((err, res) => {
+                    expect(res.status).to.equal(200);
+                    expect(res.body).to.be.a('array');
+                    expect(res.body.length).to.equal(100);
+                    done();
+                });
+        }); 
+
+        it('should be able to query for user by email address', function(done) {
+            chai.request('http://localhost:3000')
+                .get('/api/v1/users')
+                .query({email:'john50@email.com'})
+                .send(defaultUser)
+                .end((err, res) => {
+                    expect(res.status).to.equal(200);
+                    expect(res.body).to.be.a('array');
+                    expect(res.body.length).to.equal(1);
+                    expect(res.body[0].email).to.equal('john50@email.com');
+                    done();
+                });
+        }); 
+
     });
+
+
 
 });
