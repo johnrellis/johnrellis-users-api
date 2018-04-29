@@ -34,7 +34,7 @@ describe('users api', function() {
 
 
     afterEach(function(done) {
-        User.remove({email: 'john@home.com'}, function() {
+        User.remove(defaultUser, function() {
             done();
         });
     });
@@ -62,9 +62,7 @@ describe('users api', function() {
         user.save(function() {
             chai.request('http://localhost:3000')
                 .post('/api/v1/users')
-                .send({
-                    email: 'john@home.com'
-                })
+                .send(defaultUser)
                 .end((err, res) => {
                     expect(res.status).to.equal(400);
                     expect(res.body.error).to.equal('E11000 duplicate key error collection: userservice.users index: email_1 dup key: { : "john@home.com" }');
@@ -124,6 +122,30 @@ describe('users api', function() {
             .delete('/api/v1/users/5ae5a35ddb5a18d9d04d0b4d')
             .end((err, res) => {
                 expect(res.status).to.equal(404);
+                done();
+            });
+    });
+
+
+    it('should be able to update a user with PUT', function(done) {
+        let user = new User(defaultUser);
+        user.save(function() {
+            chai.request('http://localhost:3000')
+                .put(`/api/v1/users/${user._id}`)
+                .end((err, res) => {
+                    expect(res.status).to.equal(204);
+                    done();
+                });
+        });
+    });
+
+
+    it('should create a user with PUT when no user present', function(done) {
+        chai.request('http://localhost:3000')
+            .put('/api/v1/users/5ae5a35ddb5a18d9d04d0b4d')
+            .send(defaultUser)
+            .end((err, res) => {
+                expect(res.status).to.equal(201);
                 done();
             });
     });
