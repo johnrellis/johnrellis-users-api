@@ -85,3 +85,4 @@ This repo is essentially a demonstration and the following real world scenarios 
 * Authentication and Authorisation on an API level
 * Mongodb Authentication - currently uses default port without password protection supported
 * Validation of input parameters for funcionality such as GET by ID
+* unit test app.js

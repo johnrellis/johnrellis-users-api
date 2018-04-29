@@ -14,6 +14,11 @@ let userSchema = new Schema({
     }
 });
 
+/**
+ * Exposes a mongoose mondel User object.
+ * 
+ * @type {Object} 
+ */
 module.exports = mongoose.model('User',userSchema);
 
 

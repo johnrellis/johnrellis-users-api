@@ -4,6 +4,12 @@ const log = require('winston');
 const transformIdOutgoing = require('../transformIdOutgoing');
 
 
+/**
+ * async function that saves a user and calls the result on the res object
+ * 
+ * @param  {Object} req the request object, typically an express Request
+ * @param  {Object} res the response object, typically an express Response
+ */
 module.exports.save = async (req, res) => {
     let userModel = require('../models/user.model.js');
     try {
@@ -17,6 +23,14 @@ module.exports.save = async (req, res) => {
 };
 
 
+/**
+ * async function that retrives a user user for an id that is expected in req.params calls the result on the res object
+ *
+ * Will return 404 if user cannot be found
+ * 
+ * @param  {Object} req the request object, should contain params.id typically an express Request
+ * @param  {Object} res the response object, typically an express Response
+ */
 module.exports.get = async (req, res) => {
     //todo : should validate that id actually exists
     log.info(`Attempting to retrieve user for ${req.params.id}`);
