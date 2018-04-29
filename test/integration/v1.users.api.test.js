@@ -51,7 +51,7 @@ describe('users api', function() {
                 expect(res.status).to.equal(201);
                 expect(res.body.email).to.equal(defaultUser.email);
                 //todo : change to expect id
-                expect(res.body._id).to.exist;
+                expect(res.body.id).to.exist;
                 done();
             });
     });
@@ -79,7 +79,7 @@ describe('users api', function() {
                 .get(`/api/v1/users/${user._id}`)
                 .end((err, res) => {
                     expect(res.status).to.equal(200);
-                    expect(res.body.id).to.equal(user._id);
+                    expect(res.body.id).to.equal(user._id.toString());
                     expect(res.body.email).to.equal(user.email);
                     done();
                 });

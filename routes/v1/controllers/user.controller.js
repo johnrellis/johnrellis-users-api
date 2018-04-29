@@ -1,12 +1,15 @@
 'use strict';
 
 const log = require('winston');
+const transformIdOutgoing = require('../transformIdOutgoing');
+
 
 module.exports.save = async (req, res) => {
     let userModel = require('../models/user.model.js');
     try {
         let user = await userModel.save(req.body);
-        res.status(201).json(user);
+        let transformed = transformIdOutgoing(user);
+        res.status(201).json(transformed);    
     }catch(error){
         log.error(error);
         res.sendStatus(400);
@@ -21,7 +24,8 @@ module.exports.get = async (req, res) => {
     try {
         let user = await userModel.findByID(req.params.id);
         if(user){
-            res.status(200).json(user);
+            let transformed = transformIdOutgoing(user);
+            res.status(200).json(transformed);
         } else {
             res.sendStatus(404);
         }
