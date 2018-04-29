@@ -67,6 +67,7 @@ describe('users api', function() {
                 })
                 .end((err, res) => {
                     expect(res.status).to.equal(400);
+                    expect(res.body.error).to.equal('E11000 duplicate key error collection: userservice.users index: email_1 dup key: { : "john@home.com" }');
                     done();
                 });
         });

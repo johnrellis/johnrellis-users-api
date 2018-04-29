@@ -50,7 +50,7 @@ describe('user controller', function() {
     });
 
     it('should not be able to create a user', function() {
-        let saveUserStub = sinon.sandbox.stub().rejects('Failed to save');
+        let saveUserStub = sinon.sandbox.stub().rejects(new Error('Failed to save'));
 
         mockery.registerMock('../models/user.model.js', {save: saveUserStub});
         const request = {
@@ -59,7 +59,9 @@ describe('user controller', function() {
         const req = mockReq(request);
         const res = mockRes();
         return userCreateController.save(req,res).then(function() {
-            expect(res.sendStatus).to.be.calledWith(400);
+            expect(res.status).to.be.calledWith(400);
+            expect(res.json).to.be.calledWith({error:'Failed to save'});
+
         });
     });
 
@@ -68,7 +70,7 @@ describe('user controller', function() {
 
         mockery.registerMock('../models/user.model.js', {findByID: saveUserStub});
         const request = {
-            body : defaultUser
+            params : {id:'a5f6df5sd7f'}
         };
         const req = mockReq(request);
         const res = mockRes();
@@ -84,7 +86,7 @@ describe('user controller', function() {
 
         mockery.registerMock('../models/user.model.js', {findByID: saveUserStub});
         const request = {
-            body : defaultUser
+            params : {id:'a5f6df5sd7f'}
         };
         const req = mockReq(request);
         const res = mockRes();
@@ -94,16 +96,18 @@ describe('user controller', function() {
     });
 
     it('should get a 400 if error occurs', function() {
-        let saveUserStub = sinon.sandbox.stub().rejects('error');
+        let saveUserStub = sinon.sandbox.stub().rejects(new Error('Error occurred'));
 
         mockery.registerMock('../models/user.model.js', {findByID: saveUserStub});
         const request = {
-            body : defaultUser
+            params : {id:'a5f6df5sd7f'}
         };
         const req = mockReq(request);
         const res = mockRes();
         return userCreateController.get(req,res).then(function() {
-            expect(res.sendStatus).to.be.calledWith(400);
+            expect(res.status).to.be.calledWith(400);
+            expect(res.json).to.be.calledWith({error:'Error occurred'});
+
         });
     });
 

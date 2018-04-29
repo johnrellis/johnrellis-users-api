@@ -18,7 +18,7 @@ module.exports.save = async (req, res) => {
         res.status(201).json(transformed);    
     }catch(error){
         log.error(error);
-        res.sendStatus(400);
+        res.status(400).json({error:error.message});
     }
 };
 
@@ -45,6 +45,6 @@ module.exports.get = async (req, res) => {
         }
     }catch(error){
         log.error(error);
-        res.sendStatus(400);
+        res.status(400).json({error:error.message});
     }
 };
