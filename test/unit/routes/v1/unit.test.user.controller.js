@@ -95,7 +95,7 @@ describe('user controller', function() {
         });
     });
 
-    it('should get a 400 if error occurs', function() {
+    it('should get a 400 if error occurs while finding user', function() {
         let saveUserStub = sinon.sandbox.stub().rejects(new Error('Error occurred'));
 
         mockery.registerMock('../models/user.model.js', {findByID: saveUserStub});
@@ -105,6 +105,52 @@ describe('user controller', function() {
         const req = mockReq(request);
         const res = mockRes();
         return userCreateController.get(req,res).then(function() {
+            expect(res.status).to.be.calledWith(400);
+            expect(res.json).to.be.calledWith({error:'Error occurred'});
+
+        });
+    });
+
+
+    it('should be able delete user by id', function() {
+        let deleteUserStub = sinon.sandbox.stub().resolves(mockUser);
+
+        mockery.registerMock('../models/user.model.js', {delete: deleteUserStub});
+        const request = {
+            params : {id:'a5f6df5sd7f'}
+        };
+        const req = mockReq(request);
+        const res = mockRes();
+        return userCreateController.delete(req,res).then(function() {
+            expect(res.sendStatus).to.be.calledWith(204);
+        });
+    });
+
+
+    it('should get a 404 if user does not exist when deleting', function() {
+        let deleteUserStub = sinon.sandbox.stub().resolves(null);
+
+        mockery.registerMock('../models/user.model.js', {delete: deleteUserStub});
+        const request = {
+            params : {id:'a5f6df5sd7f'}
+        };
+        const req = mockReq(request);
+        const res = mockRes();
+        return userCreateController.delete(req,res).then(function() {
+            expect(res.sendStatus).to.be.calledWith(404);
+        });
+    });
+
+    it('should get a 400 if error occurs while deleting users', function() {
+        let deleteUserStub = sinon.sandbox.stub().rejects(new Error('Error occurred'));
+
+        mockery.registerMock('../models/user.model.js', {delete: deleteUserStub});
+        const request = {
+            params : {id:'a5f6df5sd7f'}
+        };
+        const req = mockReq(request);
+        const res = mockRes();
+        return userCreateController.delete(req,res).then(function() {
             expect(res.status).to.be.calledWith(400);
             expect(res.json).to.be.calledWith({error:'Error occurred'});
 

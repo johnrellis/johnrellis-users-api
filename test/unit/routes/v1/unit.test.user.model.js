@@ -57,4 +57,29 @@ describe('user model', function() {
         done();
     });
 
+    it('should be able to delete', function(done) {
+        let mockModel = {
+            findByIdAndRemove () {
+                return 'findByIdAndRemove';
+            }
+        };
+        mockery.registerMock('../schemas/user.schema.js', mockModel);
+        expect(userModel.delete('5ae5dca079e219ddc56884ed')).to.equal('findByIdAndRemove');
+        done();
+    });
+
+    it('should return null with invalid object id when findByID', function(done) {
+        let mockModel = {
+            findByIdAndRemove () {
+                return 'findByIdAndRemove';
+            }
+        };
+        mockery.registerMock('../schemas/user.schema.js', mockModel);
+        expect(userModel.delete('123456')).to.equal(null);
+        done();
+    });
+
+
+
+
 });
