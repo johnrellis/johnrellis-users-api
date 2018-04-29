@@ -68,7 +68,7 @@ describe('user model', function() {
         done();
     });
 
-    it('should return null with invalid object id when findByID', function(done) {
+    it('should return null with invalid object id when delete', function(done) {
         let mockModel = {
             findByIdAndRemove () {
                 return 'findByIdAndRemove';
@@ -80,6 +80,26 @@ describe('user model', function() {
     });
 
 
+    it('should be able to update', function(done) {
+        let mockModel = {
+            findByIdAndUpdate () {
+                return 'findByIdAndUpdate';
+            }
+        };
+        mockery.registerMock('../schemas/user.schema.js', mockModel);
+        expect(userModel.update('5ae5dca079e219ddc56884ed')).to.equal('findByIdAndUpdate');
+        done();
+    });
 
+    it('should return null with invalid object id when updating', function(done) {
+        let mockModel = {
+            findByIdAndUpdate () {
+                return 'findByIdAndUpdate';
+            }
+        };
+        mockery.registerMock('../schemas/user.schema.js', mockModel);
+        expect(userModel.update('123456')).to.equal(null);
+        done();
+    });
 
 });

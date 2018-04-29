@@ -157,4 +157,52 @@ describe('user controller', function() {
         });
     });
 
+
+    it('should be able put user by id and update it', function() {
+        let updateUserStub = sinon.sandbox.stub().resolves(mockUser);
+
+        mockery.registerMock('../models/user.model.js', {update: updateUserStub});
+        const request = {
+            params : {id:'a5f6df5sd7f'}
+        };
+        const req = mockReq(request);
+        const res = mockRes();
+        return userCreateController.put(req,res).then(function() {
+            expect(res.status).to.be.calledWith(200);
+            expect(res.json).to.be.calledWith(mockUser);
+        });
+    });
+
+    it('should be able put user by id and create it', function() {
+        let updateUserStub = sinon.sandbox.stub().resolves(null);
+        let saveUserStub = sinon.sandbox.stub().resolves(mockUser);
+
+        mockery.registerMock('../models/user.model.js', {update: updateUserStub, save:saveUserStub});
+        const request = {
+            params : {id:'a5f6df5sd7f'}
+        };
+        const req = mockReq(request);
+        const res = mockRes();
+        return userCreateController.put(req,res).then(function() {
+            expect(res.status).to.be.calledWith(201);
+            expect(res.json).to.be.calledWith(mockUser);
+        });
+    });
+
+    it('should throw an error when putting with id in body', function() {
+        let updateUserStub = sinon.sandbox.stub().resolves(mockUser);
+
+        mockery.registerMock('../models/user.model.js', {update: updateUserStub});
+        const request = {
+            params : {id:'a5f6df5sd7f'},
+            body : {id:12345}
+        };
+        const req = mockReq(request);
+        const res = mockRes();
+        return userCreateController.put(req,res).then(function() {
+            expect(res.status).to.be.calledWith(400);
+            expect(res.json).to.be.calledWith({error:'cannot have an id in the body of the request, must be the resource locator'});
+        });
+    });
+
 });
