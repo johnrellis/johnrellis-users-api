@@ -35,4 +35,15 @@ describe('user.create', function() {
         done();
     });
 
+    it('should be able to findByID', function(done) {
+        let mockModel = {
+            findById () {
+                return 'findById';
+            }
+        };
+        mockery.registerMock('../schemas/user.schema.js', mockModel);
+        expect(userModel.findByID(defaultUser)).to.equal('findById');
+        done();
+    });
+
 });

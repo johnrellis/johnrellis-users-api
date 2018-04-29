@@ -18,7 +18,7 @@ module.exports.save = async (req, res) => {
 
 
 module.exports.get = async (req, res) => {
-//todo : should validate that id actually exists
+    //todo : should validate that id actually exists
     log.info(`Attempting to retrieve user for ${req.params.id}`);
     let userModel = require('../models/user.model.js');
     try {

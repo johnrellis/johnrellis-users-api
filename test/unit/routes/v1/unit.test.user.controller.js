@@ -78,4 +78,33 @@ describe('user controller', function() {
         });
     });
 
+
+    it('should get a 404 if user does not exist', function() {
+        let saveUserStub = sinon.sandbox.stub().resolves(null);
+
+        mockery.registerMock('../models/user.model.js', {findByID: saveUserStub});
+        const request = {
+            body : defaultUser
+        };
+        const req = mockReq(request);
+        const res = mockRes();
+        return userCreateController.get(req,res).then(function() {
+            expect(res.sendStatus).to.be.calledWith(404);
+        });
+    });
+
+    it('should get a 400 if error occurs', function() {
+        let saveUserStub = sinon.sandbox.stub().rejects('error');
+
+        mockery.registerMock('../models/user.model.js', {findByID: saveUserStub});
+        const request = {
+            body : defaultUser
+        };
+        const req = mockReq(request);
+        const res = mockRes();
+        return userCreateController.get(req,res).then(function() {
+            expect(res.sendStatus).to.be.calledWith(400);
+        });
+    });
+
 });
