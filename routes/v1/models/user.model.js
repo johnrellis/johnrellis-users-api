@@ -34,3 +34,13 @@ module.exports.delete = (id) => {
     return mongoose.Types.ObjectId.isValid(id) ? User.findByIdAndRemove(id) : null;
 };
 
+/**
+ * Calls mongoose and mongodb to findByIdAndUpdate a user 
+ * @param  {String} user the _id of a mongoose object
+ * @return {Object}      the found object
+ */
+module.exports.update = (id, user) => {
+    const User = require('../schemas/user.schema.js');
+    return mongoose.Types.ObjectId.isValid(id) ? User.findByIdAndUpdate(id, user, {new:true}) : null;
+};
+

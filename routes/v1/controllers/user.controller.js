@@ -77,3 +77,35 @@ module.exports.delete = async (req, res) => {
         res.status(400).json({error:error.message});
     }
 };
+
+/**
+ * async function to put a user by id that is expected in req.params, 200 if already exists and updated
+ * 201 if created.  Will also return the most up to date version of the document
+ * 
+ * @param  {Object} req the request object, should contain params.id typically an express Request
+ * @param  {Object} res the response object, typically an express Response
+ */
+module.exports.put = async (req, res) => {
+    //todo : should validate that id actually exists
+    log.info(`Attempting to put user for ${req.params.id}`);
+
+    let userModel = require('../models/user.model.js');
+    try {
+        if(req.body.id){
+            //todo : should be handled by json schema validation or similar
+            throw new Error('cannot have an id in the body of the request, must be the resource locator');
+        }
+        let updated = await userModel.update(req.params.id, req.body);
+        if(updated){
+            log.info(`Updated ${req.params.id}`);
+            res.status(200).json(updated);
+        } else {
+            log.info(`Cannot find ${req.params.id}, creating`);
+            req.body._id = req.params.id;
+            await module.exports.save(req,res);
+        }
+    }catch(error){
+        log.error(error);
+        res.status(400).json({error:error.message});
+    }
+};

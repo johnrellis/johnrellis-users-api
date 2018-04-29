@@ -34,13 +34,17 @@ describe('users api', function() {
 
 
     afterEach(function(done) {
-        User.remove(defaultUser, function() {
+        User.find({$or: [{email: defaultUser.email}, {email: updatedUser.email}]}).remove(function() {
             done();
         });
     });
 
     let defaultUser = {
         email: 'john@home.com'
+    };
+
+    let updatedUser = {
+        email: 'johnagain@home.com'
     };
 
     it('should be able to create a user', function(done) {
@@ -132,9 +136,17 @@ describe('users api', function() {
         user.save(function() {
             chai.request('http://localhost:3000')
                 .put(`/api/v1/users/${user._id}`)
+                .send(updatedUser)
                 .end((err, res) => {
-                    expect(res.status).to.equal(204);
-                    done();
+                    expect(res.status).to.equal(200);
+                    expect(res.body.email).to.equal(updatedUser.email);
+                    chai.request('http://localhost:3000')
+                        .get(`/api/v1/users/${user._id}`)
+                        .end((err, res) => {
+                            expect(res.status).to.equal(200);
+                            expect(res.body.email).to.equal(updatedUser.email);
+                            done();
+                        });
                 });
         });
     });
@@ -142,11 +154,18 @@ describe('users api', function() {
 
     it('should create a user with PUT when no user present', function(done) {
         chai.request('http://localhost:3000')
-            .put('/api/v1/users/5ae5a35ddb5a18d9d04d0b4d')
+            .put('/api/v1/users/5ae5a35ddb5a18d9d04d0b4e')
             .send(defaultUser)
             .end((err, res) => {
                 expect(res.status).to.equal(201);
-                done();
+                expect(res.body.email).to.equal(defaultUser.email);
+                chai.request('http://localhost:3000')
+                    .get('/api/v1/users/5ae5a35ddb5a18d9d04d0b4e')
+                    .end((err, res) => {
+                        expect(res.status).to.equal(200);
+                        expect(res.body.id).to.equal('5ae5a35ddb5a18d9d04d0b4e');
+                        done();
+                    });
             });
     });
 });
