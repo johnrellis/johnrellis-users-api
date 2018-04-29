@@ -15,6 +15,7 @@ chai.use(sinonChai);
 
 describe('user controller', function() {
     let sandbox = null;
+    let mockUser = {id:'12345f', email:'john@home.com'};
 
     beforeEach(function() {
         sandbox = sinon.sandbox.create();
@@ -34,7 +35,7 @@ describe('user controller', function() {
     };
 
     it('should be able to create a user', function() {
-        let saveUserStub = sinon.sandbox.stub().resolves({hello:'there'});
+        let saveUserStub = sinon.sandbox.stub().resolves(mockUser);
 
         mockery.registerMock('../models/user.model.js', {save: saveUserStub});
         const request = {
@@ -44,6 +45,7 @@ describe('user controller', function() {
         const res = mockRes();
         return userCreateController.save(req,res).then(function() {
             expect(res.status).to.be.calledWith(201);
+            expect(res.json).to.be.calledWith(mockUser);
         });
     });
 
@@ -62,7 +64,7 @@ describe('user controller', function() {
     });
 
     it('should not be able find user by id', function() {
-        let saveUserStub = sinon.sandbox.stub().resolves({id:'12345f', email:'john@home.com'});
+        let saveUserStub = sinon.sandbox.stub().resolves(mockUser);
 
         mockery.registerMock('../models/user.model.js', {findByID: saveUserStub});
         const request = {
@@ -72,7 +74,7 @@ describe('user controller', function() {
         const res = mockRes();
         return userCreateController.get(req,res).then(function() {
             expect(res.status).to.be.calledWith(200);
-            expect(res.json).to.be.calledWith({id:'12345f', email:'john@home.com'});
+            expect(res.json).to.be.calledWith(mockUser);
         });
     });
 
