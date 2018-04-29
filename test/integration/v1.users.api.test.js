@@ -199,14 +199,14 @@ describe('users api', function() {
         });
 
 
-        it('should be able to query for a list of users', function(done) {
+        it('should be able to query for a list of users with default page size of 10', function(done) {
             chai.request('http://localhost:3000')
                 .get('/api/v1/users')
                 .send(defaultUser)
                 .end((err, res) => {
                     expect(res.status).to.equal(200);
                     expect(res.body).to.be.a('array');
-                    expect(res.body.length).to.equal(100);
+                    expect(res.body.length).to.equal(10);
                     done();
                 });
         }); 
@@ -221,6 +221,74 @@ describe('users api', function() {
                     expect(res.body).to.be.a('array');
                     expect(res.body.length).to.equal(1);
                     expect(res.body[0].email).to.equal('john50@email.com');
+                    done();
+                });
+        }); 
+
+        it('should be able to query for and sort by email with no offset and limit of 5', function(done) {
+            chai.request('http://localhost:3000')
+                .get('/api/v1/users')
+                .query({sort:'email', limit:5, offset:0})
+                .send(defaultUser)
+                .end((err, res) => {
+                    expect(res.status).to.equal(200);
+                    expect(res.body).to.be.a('array');
+                    expect(res.body.length).to.equal(5);
+                    expect(res.body[0].email).to.equal('john0@email.com');
+                    expect(res.body[1].email).to.equal('john100@email.com');
+                    expect(res.body[2].email).to.equal('john101@email.com');
+                    expect(res.body[3].email).to.equal('john102@email.com');
+                    expect(res.body[4].email).to.equal('john103@email.com');
+
+                    done();
+                });
+        }); 
+
+        it('should be able to query for and sort by email desc with no offset and limit of 5', function(done) {
+            chai.request('http://localhost:3000')
+                .get('/api/v1/users')
+                .query({sort:'-email', limit:5, offset:0})
+                .send(defaultUser)
+                .end((err, res) => {
+                    expect(res.status).to.equal(200);
+                    expect(res.body).to.be.a('array');
+                    expect(res.body.length).to.equal(5);
+                    expect(res.body[0].email).to.equal('john9@email.com');
+                    expect(res.body[1].email).to.equal('john99@email.com');
+                    expect(res.body[2].email).to.equal('john98@email.com');
+                    expect(res.body[3].email).to.equal('john97@email.com');
+                    expect(res.body[4].email).to.equal('john96@email.com');
+                    done();
+                });
+        }); 
+
+        it('should be able to query for and sort by email desc with offset of 5 and limit of 5', function(done) {
+            chai.request('http://localhost:3000')
+                .get('/api/v1/users')
+                .query({sort:'-email', limit:5, offset:5})
+                .send(defaultUser)
+                .end((err, res) => {
+                    expect(res.status).to.equal(200);
+                    expect(res.body).to.be.a('array');
+                    expect(res.body.length).to.equal(5);
+                    expect(res.body[0].email).to.equal('john95@email.com');
+                    expect(res.body[1].email).to.equal('john94@email.com');
+                    expect(res.body[2].email).to.equal('john93@email.com');
+                    expect(res.body[3].email).to.equal('john92@email.com');
+                    expect(res.body[4].email).to.equal('john91@email.com');
+                    done();
+                });
+        }); 
+
+        it('should be able to query for a max of 100', function(done) {
+            chai.request('http://localhost:3000')
+                .get('/api/v1/users')
+                .query({sort:'-email', limit:200, offset:0})
+                .send(defaultUser)
+                .end((err, res) => {
+                    expect(res.status).to.equal(200);
+                    expect(res.body).to.be.a('array');
+                    expect(res.body.length).to.equal(100);
                     done();
                 });
         }); 

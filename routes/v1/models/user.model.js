@@ -50,8 +50,8 @@ module.exports.update = (id, user) => {
  * @param  {Object} query the query to search for
  * @return {Array}  the list of users, currently limited to 100
  */
-module.exports.where = (query) => {
+module.exports.where = (query, limit = 10, offset = 0 ,sort = '') => {
     const User = require('../schemas/user.schema.js');
-    return User.find(query).limit(100);
+    return User.find(query).skip(offset).limit(limit).sort(sort);
 };
 

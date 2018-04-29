@@ -122,9 +122,10 @@ module.exports.put = async (req, res) => {
 module.exports.list = async (req, res) => {
     //todo : should validate that id actually exists
     log.info('Attempting to query users for ', req.query);
+    log.info('Attempting to query users for ', req.params);
     let userModel = require('../models/user.model.js');
     try {
-        let users = await userModel.where(req.query);
+        let users = await userModel.where(req.query, req.params.limit, req.params.offset,req.params.sort);
         let transformedUsers = users.map(user => transformIdOutgoing(user));
         res.status(200).json(transformedUsers);
     }catch(error){
