@@ -1,5 +1,11 @@
 'use strict';
 
+/*
+ * A controller to act as a bridge between the http API and the persistence layer for the user resource.
+ * Should not contain any specific implementation of persistence to allow ease of testing and introduce
+ * a degree of decoupling
+ */
+
 const log = require('winston');
 const transformIdOutgoing = require('../transformIdOutgoing');
 
