@@ -30,6 +30,9 @@ Unit tests are run via the npm command
 
 `npm test`
 
+The `mockery` npm module is used in conjunction with `sinon` with a number of `sinon` variations to enable mocking in the unit tests.
+
+### Code coverage
 
 Code coverage is provided by `istanbul` via the `nyc` npm module.  The unit tests do not utilise mongodb.  Mocking of required dependencies is done via `mockery` with `sinon` utilised to create stubs and spies.
 
@@ -68,7 +71,7 @@ Deployed to https://hub.docker.com/r/johnrellis/johnrellis-users-api and tagged 
 
 ## Run
 
-`docker run -p 3000:3000 johnrellis/users-api:1 node app.js` where '1' is the `TRAVIS_BUILD_NUMBER`
+`docker run -p 3000:3000 johnrellis/johnrellis-users-api:1 node app.js` where '1' is the `TRAVIS_BUILD_NUMBER`
 
 Note that this requires a mongo db instance to be running on a host declared as `MONGODB_HOST` in the environment
 
