@@ -22,6 +22,9 @@
   "bugs": {
     "url": "https://github.com/johnrellis/johnrellis-users-api/issues"
   },
+  "engines": {
+    "node": ">= v8.11.1"
+  },
   "dependencies": {
     "body-parser": "^1.18.2",
     "eslint": "^4.19.1",
