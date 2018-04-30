@@ -108,3 +108,4 @@ This repo is essentially a demonstration and the following real world scenarios 
 * Mongodb Authentication - currently uses default port without password protection, this is not an idea scenario for production, all mongodb connections should be secured
 * Validation of input into the API to ensure the input makes sense, the `jsonschema` npm module is a viable option
 * Remove as many instanbul ignores as possible, currently there are a small number, such as in app.js but this needs to be evaluated for it's value to the quality of the deployment if the integration tests can cover any of these scenarios
+* API documentation required, Swagger is a viable option
