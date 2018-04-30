@@ -13,7 +13,7 @@ script:
   - docker-compose -f docker-compose-integration.yml up -d
   - sleep 10
   - docker exec -it api npm run integration
-  - docker-compose -f docker-compose.yml down
+  - docker-compose -f docker-compose-integration.yml down
   - sleep 10
 
 deploy:
