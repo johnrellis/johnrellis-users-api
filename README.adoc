@@ -5,16 +5,49 @@ image:https://travis-ci.org/johnrellis/johnrellis-users-api.svg?branch=master["B
 
 An API for performing CRUDL on users
 
+## Running and testing with docker-compose
+
+To run the application, simply use docker-compose
+
+`docker-compose -f docker-compose.yml up -d`
+
+This will create 2 services, api and mongo.
+
+To verify that the api is running, run 
+
+`curl http://localhost:3000`
+
+A response with a 200 HTTP code will respond with the message "I am alive".
+
+Unit and integration tests can be run with the following commands respectively :
+
+* `docker exec -it api npm run test`
+* `docker exec -it api npm run integration`
+
+## A quick intro to the API
+
+The following actions are currently supported:
+
+* CREATE - POST /api/v1/users with a json body
+* READ - GET /api/v1/users/:id 
+* UPDATE- PUT /api/v1/users/:id with a json body, if `id` does not exist, a new user will be created
+* DELETE - DELETE /api/v1/users/:id 
+* LIST - GET /api/v1/users
+** user property names can be used to filter e.g. `?email=john@home.com`.  Full match is currently required, less than or greater than queries are not yet supported.  Pagination is supported via `limit`, `offset` `sort` e.g. `?limit=10&offset=10&sort=-email` to sort descending or `?limit=10&offset=10&sort=email` for ascending
+
+
 ## Stack
 
-* API - Node.js
-* Persistence - Mongodb
+* API - Node.js - engine configured to greater or equal to v8.11.1
+* Persistence - Mongodb - tested against version 3.6 - the integration will continue to test against latest version until an incompatibility fails the build.  Mongoose is used as an ORM
 
-## Environment
+## Running without docker-cpmpose
 
-Required Environment Variables
+If running without the docker-compose.yml the following environment variable are required:
 
 * MONGODB_HOST e.g. `export MONGODB_HOST=localhost`
+
+With a mongodb instance running on on the MONGODB_HOST with the default port exposed, the app can then be started with `node app.js`.  Currently, authentication or custom mongodb ports are not implemented
 
 ## Code Quality and Testing
 
@@ -30,11 +63,11 @@ Unit tests are run via the npm command
 
 `npm test`
 
-The `mockery` npm module is used in conjunction with `sinon` with a number of `sinon` variations to enable mocking in the unit tests.
+The `mockery` npm module is used in conjunction with `sinon` and number of `sinon` variations to enable mocking in the unit tests.
 
 ### Code coverage
 
-Code coverage is provided by `istanbul` via the `nyc` npm module.  The unit tests do not utilise mongodb.  Mocking of required dependencies is done via `mockery` with `sinon` utilised to create stubs and spies.
+Code coverage is provided by `istanbul` via the `nyc` npm module during the unit test phase.
 
 ### Integration testing
 
@@ -46,10 +79,7 @@ A connection to mongodb is required and the `MONGODB_HOST` environment variables
 
 `node app.js`
 
-The supplied 'docker-compose.yml' can also be used to start the application with a mongodb instance.  Integration tests can then be run against this instance if required.
-
-`docker-compose -f docker-compose.yml up -d`
-`docker exec -it api npm run integration`
+The supplied 'docker-compose.yml' can also be used to start the application with a mongodb instance. See the "Running and testing with docker-compose" section above.
 
 ## Build
 
@@ -69,23 +99,12 @@ The travis build 'script' contains a number of steps that can be summarised as
 
 Deployed to https://hub.docker.com/r/johnrellis/johnrellis-users-api and tagged with `TRAVIS_BUILD_NUMBER`
 
-## Run
-
-`docker run -p 3000:3000 johnrellis/johnrellis-users-api:1 node app.js` where '1' is the `TRAVIS_BUILD_NUMBER`
-
-Note that this requires a mongo db instance to be running on a host declared as `MONGODB_HOST` in the environment
-
-Alternatively, `docker-compose.yml` may be altered to target a specific tag and application can be run with
-
-`docker-compose -f docker-compose.yml up -d`
-
-Once running, the API will be available on `http://localhost:3000/api/v1/users`
 
 ## TODO 
 
 This repo is essentially a demonstration and the following real world scenarios have not yet been implemented
 
-* Authentication and Authorisation on an API level
-* Mongodb Authentication - currently uses default port without password protection supported
-* Validation of input parameters for funcionality such as GET by ID
-* unit test app.js
+* Authentication and Authorisation on an API level, the `passport` npm module might be a good place to start for Authentication
+* Mongodb Authentication - currently uses default port without password protection, this is not an idea scenario for production, all mongodb connections should be secured
+* Validation of input into the API to ensure the input makes sense, the `jsonschema` npm module is a viable option
+* Remove as many instanbul ignores as possible, currently there are a small number, such as in app.js but this needs to be evaluated for it's value to the quality of the deployment if the integration tests can cover any of these scenarios
