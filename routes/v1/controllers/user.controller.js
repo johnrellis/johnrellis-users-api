@@ -8,7 +8,18 @@
 
 const log = require('winston');
 const transformIdOutgoing = require('../transformIdOutgoing');
+const { Validator } = require('jsonschema');
 
+const userSchema = {
+    id: '/User',
+    type: 'object',
+    properties: {
+        email: { type: 'string', format: 'email' }
+    },
+    required: ['email']
+};
+
+const validator = new Validator();
 
 /**
  * async function that saves a user and calls the result on the res object
@@ -18,6 +29,10 @@ const transformIdOutgoing = require('../transformIdOutgoing');
  */
 module.exports.save = async (req, res) => {
     let userModel = require('../models/user.model.js');
+    const validationResult = validator.validate(req.body, userSchema);
+    if (!validationResult.valid) {
+        return res.status(400).json({ error: validationResult.errors.map(e => e.stack).join(', ') });
+    }
     try {
         let user = await userModel.save(req.body);
         let transformed = transformIdOutgoing(user);
@@ -90,6 +105,10 @@ module.exports.put = async (req, res) => {
     log.info(`Attempting to put user for ${req.params.id}`);
 
     let userModel = require('../models/user.model.js');
+    const validationResult = validator.validate(req.body, userSchema);
+    if (!validationResult.valid) {
+        return res.status(400).json({ error: validationResult.errors.map(e => e.stack).join(', ') });
+    }
     try {
         if(req.body.id){
             //todo : should be handled by json schema validation or similar

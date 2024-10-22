@@ -99,6 +99,185 @@ The travis build 'script' contains a number of steps that can be summarised as
 
 Deployed to https://hub.docker.com/r/johnrellis/johnrellis-users-api and tagged with `TRAVIS_BUILD_NUMBER`
 
+## API Documentation
+
+The API documentation is generated using Swagger. To view the documentation, follow these steps:
+
+1. Install Swagger UI:
+   ```
+   npm install -g swagger-ui
+   ```
+
+2. Create a Swagger configuration file (swagger.json) in the root directory of the project. Here is an example configuration:
+   ```json
+   {
+     "swagger": "2.0",
+     "info": {
+       "version": "1.0.0",
+       "title": "johnrellis-users-api",
+       "description": "An API for performing CRUDL on users"
+     },
+     "host": "localhost:3000",
+     "basePath": "/api/v1",
+     "schemes": [
+       "http"
+     ],
+     "paths": {
+       "/users": {
+         "post": {
+           "summary": "Create a user",
+           "description": "Creates a new user",
+           "parameters": [
+             {
+               "in": "body",
+               "name": "body",
+               "description": "User object",
+               "required": true,
+               "schema": {
+                 "$ref": "#/definitions/User"
+               }
+             }
+           ],
+           "responses": {
+             "201": {
+               "description": "User created"
+             }
+           }
+         },
+         "get": {
+           "summary": "List users",
+           "description": "Lists all users",
+           "parameters": [
+             {
+               "in": "query",
+               "name": "email",
+               "type": "string",
+               "description": "Filter by email"
+             },
+             {
+               "in": "query",
+               "name": "limit",
+               "type": "integer",
+               "description": "Limit the number of results"
+             },
+             {
+               "in": "query",
+               "name": "offset",
+               "type": "integer",
+               "description": "Offset the results"
+             },
+             {
+               "in": "query",
+               "name": "sort",
+               "type": "string",
+               "description": "Sort the results"
+             }
+           ],
+           "responses": {
+             "200": {
+               "description": "List of users"
+             }
+           }
+         }
+       },
+       "/users/{id}": {
+         "get": {
+           "summary": "Get a user",
+           "description": "Gets a user by ID",
+           "parameters": [
+             {
+               "in": "path",
+               "name": "id",
+               "type": "string",
+               "required": true,
+               "description": "User ID"
+             }
+           ],
+           "responses": {
+             "200": {
+               "description": "User found"
+             },
+             "404": {
+               "description": "User not found"
+             }
+           }
+         },
+         "put": {
+           "summary": "Update a user",
+           "description": "Updates a user by ID",
+           "parameters": [
+             {
+               "in": "path",
+               "name": "id",
+               "type": "string",
+               "required": true,
+               "description": "User ID"
+             },
+             {
+               "in": "body",
+               "name": "body",
+               "description": "User object",
+               "required": true,
+               "schema": {
+                 "$ref": "#/definitions/User"
+               }
+             }
+           ],
+           "responses": {
+             "200": {
+               "description": "User updated"
+             },
+             "201": {
+               "description": "User created"
+             }
+           }
+         },
+         "delete": {
+           "summary": "Delete a user",
+           "description": "Deletes a user by ID",
+           "parameters": [
+             {
+               "in": "path",
+               "name": "id",
+               "type": "string",
+               "required": true,
+               "description": "User ID"
+             }
+           ],
+           "responses": {
+             "204": {
+               "description": "User deleted"
+             },
+             "404": {
+               "description": "User not found"
+             }
+           }
+         }
+       }
+     },
+     "definitions": {
+       "User": {
+         "type": "object",
+         "properties": {
+           "email": {
+             "type": "string",
+             "format": "email"
+           }
+         },
+         "required": [
+           "email"
+         ]
+       }
+     }
+   }
+   ```
+
+3. Start the Swagger UI server:
+   ```
+   swagger-ui -f swagger.json
+   ```
+
+4. Open your browser and navigate to `http://localhost:3000/docs` to view the API documentation.
 
 ## TODO 
 
